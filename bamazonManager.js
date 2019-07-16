@@ -18,7 +18,7 @@ var start = function() {
         name: "productID",
         type: "rawlist",
         message: "What is the product id you would like to purchase?"
-
+        choices: []
     })
 
 
