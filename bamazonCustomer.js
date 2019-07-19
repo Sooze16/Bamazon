@@ -67,76 +67,104 @@ var inventory = function() {
     })
 }
 
+
+function goAgain() {
+    inquirer
+        .prompt([{
+
+            name: "userAnswer",
+            type: "confirm",
+            message: "Would you like to continue?"
+        }]).then(function(answer) {
+            if (answer.userAnswer) {
+                inventory()
+            } else {
+                connection.end()
+                console.log("Thank you for shopping with us!".silly);
+
+                process.exit()
+            }
+            // console.log('TEST', answer.userAnswer)
+        })
+}
+
+
 var askTheCustomer = function() {
 
-        inquirer
-            .prompt([{
-                    name: "item_id",
-                    type: "input",
-                    message: "Please enter Product ID# of the item you would like to purchase?",
-                    validate: function(value) {
-                        if (isNaN(value) === false) {
-                            return true;
-                        }
-                        console.log("\n" + "Please enter a number".error)
-                        return false;
+    inquirer
+        .prompt([{
+                name: "item_id",
+                type: "input",
+                message: "Please enter Product ID# of the item you would like to purchase?",
+                validate: function(value) {
+                    if (isNaN(value) === false) {
+                        return true;
                     }
-                },
-                {
-                    name: "quantity",
-                    type: "input",
-                    message: "Please enter the quantity you wish to purchase?",
-                    validate: function(value) {
-                        if (isNaN(value) === false) {
-
-                            return true;
-
-                        }
-                        console.log("\n" + "Please enter a number".error)
-                        return false;
-
-
-                    }
+                    console.log("\n" + "Please enter a number".error)
+                    return false;
                 }
-            ])
-            .then(function(data) {
-                    // console.log(data)
-                    var inputId = parseInt(data.item_id)
-                    connection.query("SELECT * FROM products WHERE item_id=" + inputId, function(err, results) {
+            },
+            {
+                name: "quantity",
+                type: "input",
+                message: "Please enter the quantity you wish to purchase?",
+                validate: function(value) {
+                    if (isNaN(value) === false) {
+
+                        return true;
+
+                    }
+                    console.log("\n" + "Please enter a number".error)
+                    return false;
 
 
-                        if (err) throw err;
-                        console.log(results)
+                }
+            }
+        ])
+        .then(function(data) {
+            // console.log(data)
+            var inputId = parseInt(data.item_id)
+            connection.query("SELECT * FROM products WHERE item_id=" + inputId, function(err, results) {
 
 
-                        if (results[0].stock_quantity >= parseInt(data.quantity)) {
-                            console.log(data.quantity)
-                            var newQ = results[0].stock_quantity - parseInt(data.quantity)
-                            console.log("Current Stock: ", newQ)
-                            var totalPrice = results[0].price * parseInt(data.quantity)
-                            connection.query(
-                                "UPDATE products SET ? WHERE ?", [{
-                                        stock_quantity: newQ
-                                    },
-                                    {
-                                        item_id: inputId
-                                    }
-                                ],
-                                function(error) {
-                                    // if (error) throw err;
-                                    console.log(error)
-                                    console.log("Thank you for your purchase!".silly)
-                                    console.log("Purchase total: ".info + "$" + totalPrice);
-                                    orderMore();
+                if (err) throw err;
+                // console.log(results)
 
-                                }
-                                // be sure you have enough invertory
-                                //if yes you need to sell and upate the inventory
 
-                            );
-                        } else {
-                            console.log("We do not have sufficient inventory. There are ".warn + results[0].stock_quantity + " units in stock.".warn)
-                            connection.end()
-                            process.exit()
+                if (results[0].stock_quantity >= parseInt(data.quantity)) {
+                    // console.log(data.quantity)
+                    var newQ = results[0].stock_quantity - parseInt(data.quantity)
+                    console.log("Current Stock: ".debug, newQ)
+                    var totalPrice = results[0].price * parseInt(data.quantity)
+                    connection.query(
+                        "UPDATE products SET ? WHERE ?", [{
+                                stock_quantity: newQ
+                            },
+                            {
+                                item_id: inputId
+                            }
+                        ],
+                        function(error) {
+                            if (error) throw err;
+                            // console.log(error)
+                            console.log("Thank you for your purchase!".silly)
+                            console.log("Purchase total: ".info + "$" + totalPrice);
+                            goAgain()
+                                // orderMore();
+                                // end 
+
                         }
-                    })
+                        // be sure you have enough invertory
+                        //if yes you need to sell and upate the inventory
+
+                    );
+                } else {
+                    console.log("We do not have sufficient inventory. There are ".warn + results[0].stock_quantity + " units in stock.".warn)
+
+                    goAgain()
+                        // process.exit()
+                }
+
+            })
+        })
+}
