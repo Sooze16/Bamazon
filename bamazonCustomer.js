@@ -2,19 +2,13 @@
 
 var mysql = require("mysql")
 var inquirer = require("inquirer")
-
 var Table = require('cli-table')
-
-
 
 var colors = require('colors')
 colors.setTheme({
     silly: 'rainbow',
-    input: 'grey',
     verbose: 'cyan',
-    prompt: 'grey',
     info: 'green',
-    data: 'grey',
     help: 'cyan',
     warn: 'yellow',
     debug: 'blue',
@@ -32,16 +26,14 @@ var connection = mysql.createConnection({
 
 
 connection.connect(function(err) {
-    console.log("Connected as id: " + connection.threadID + "\n");
+    console.log("Connected as id: " + connection.threadId + "\n");
     inventory();
 })
 
 var inventory = function() {
     connection.query("SELECT * FROM products", function(err, results) {
         if (err) throw err;
-        // for (var i = 0; i < results.length; i++) {
-        //     console.log(results[i].item_id, results[i].product_name, results[i].price)
-        // }
+
         console.log("--------------------------------------------------".verbose);
         console.log("               Welcome To Bamazon    ".silly);
         console.log("--------------------------------------------------".verbose);
@@ -74,7 +66,7 @@ function goAgain() {
 
             name: "userAnswer",
             type: "confirm",
-            message: "Would you like to continue?"
+            message: "Would you like to continue shopping?.".silly
         }]).then(function(answer) {
             if (answer.userAnswer) {
                 inventory()
@@ -100,7 +92,7 @@ var askTheCustomer = function() {
                     if (isNaN(value) === false) {
                         return true;
                     }
-                    console.log("\n" + "Please enter a number".error)
+                    console.log("\n" + "Please enter a valid Product ID number".error)
                     return false;
                 }
             },
