@@ -146,7 +146,7 @@ var askTheCustomer = function() {
                                 // end 
 
                         }
-                        // be sure you have enough invertory
+                        // be sure you have enough inventory
                         //if yes you need to sell and upate the inventory
 
                     );

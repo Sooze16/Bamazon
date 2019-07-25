@@ -66,10 +66,20 @@ If a manager selects Add New Product, it should allow the manager to add a compl
 - Node JS
 - JSON
 - npm inquirer
-- npm console.table
+- npm cli-table
+- npm colors
 - MySQL
 
 ## Video Link to Demo:
+
+### Customer Demo:
+https://drive.google.com/file/d/1fm5_MSZjmCHGw6khCQmlljz44SiTUESI/view
+
+### Manager Demo:
+
+https://drive.google.com/file/d/1HU_Nu4bk3qVu9Eth7yMJa3iLC2AYxvM5/view
+
+
 
 
 

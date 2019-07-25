@@ -1,5 +1,6 @@
 // Challenge #2: Manager View (Next Level)
 
+
 var mysql = require("mysql")
 var inquirer = require("inquirer")
 var colors = require('colors')
@@ -115,7 +116,7 @@ function addToInventory() {
     inquirer
         .prompt([{
                 name: "item_id",
-                type: "number",
+                type: "input",
                 message: "Enter the item ID# to add inventory: ",
 
                 validate: function(value) {
@@ -185,7 +186,9 @@ function newProduct() {
 
                 name: "newItem",
                 type: "input",
-                message: "What new product would you like to add to inventory?"
+                message: "What new product would you like to add to inventory?",
+
+
             },
 
             {
@@ -197,13 +200,28 @@ function newProduct() {
             {
                 name: "price",
                 type: "number",
-                message: "Enter product unit cost: $"
+                message: "Enter product unit cost: $",
+                validate: function(value) {
+                    if (isNaN(value) === false) {
+                        return true;
+                    }
+                    console.log("\n" + "Please enter a number".error)
+                    return false;
+                }
             },
 
             {
                 name: "quantity",
                 type: "number",
-                message: "Enter unit quantity: "
+                message: "Enter unit quantity: ",
+                validate: function(value) {
+                    if (isNaN(value) === false) {
+                        return true;
+                    }
+                    console.log("\n" + "Please enter a number".error)
+                    return false;
+                }
+
             }
 
         ])
